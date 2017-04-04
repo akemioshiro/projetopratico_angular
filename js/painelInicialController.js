@@ -1,41 +1,66 @@
-var app = angular.module('app', ['ui.mask']); // injeção de dependencia: ui.mask
+var app = angular.module('app', ['ui.mask', 'angular-loading-bar']);
 
-app.controller('painelInicialController', function($scope, $http){
+app.controller('painelInicialController', function ($scope, $http) {
     $scope.showCadastro = false;
     $scope.noticia = objNoticia();
-    
-    $scope.abreCadastroNoticia = function(){
+    $scope.allNoticias = {};
+
+    $scope.abreCadastroNoticia = function () {
         $scope.showCadastro = true;
     }
-    
-    $scope.cadastrarNovaNoticia = function(){
+
+    $scope.listarNoticias = function () {
+        $http.get('../api/listarNoticias')
+            .success(function (data) {
+                console.log(data);
+                $scope.allNoticias = data.noticias;
+            })
+            .error(function () {
+                alert("Falha em obter notícias");
+            });
+    };
+
+    $scope.cadastrarNovaNoticia = function () {
         $http
-            .post('../api/cadastrarNovaNoticia', $scope.noticia) // manda todo o objeto para a api
-            .success(function(data){
-                
-                if(!data.erro) {
+            .post('../api/cadastrarNovaNoticia', $scope.noticia)
+            .success(function (data) {
+
+                if (!data.erro) {
                     // deu certo o cadastro
-                    alert("Cadastro efetuado com sucesso!");
+
+                    $.gritter.add({
+                        title: "Sucesso!",
+                        text: "Notícia cadastrada com sucesso!",
+                        class_name: "gritter"
+                    });
+
                     $scope.showCadastro = false;
                     $scope.noticia = objNoticia();
+                    $scope.listarNoticias();
                 } else {
-                    alert("Falha ao cadastrar notícia!");   
+                    $.gritter.add({
+                        title: "Falha!",
+                        text: "Ocorreu um erro!",
+                        class_name: "gritter"
+                    });
                 }
-            
+
             })
-            .error(function(){
+            .error(function () {
                 alert("Falha geral da aplicação!");
             });
     };
-    
+
+    $scope.listarNoticias();
+
 });
 
-function objNoticia(){
+function objNoticia() {
     return {
-        idnoticia : -1,
-        noticiatitulo : "",
-        noticiadescricao : "",
-        noticiatexto : "",
-        noticiadata : ""
+        idnoticia: -1,
+        noticiatitulo: "",
+        noticiadescricao: "",
+        noticiatexto: "",
+        noticiadata: ""
     };
 }

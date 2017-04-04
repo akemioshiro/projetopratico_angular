@@ -17,14 +17,14 @@ app.controller('loginController', function($scope, $http){
             .success(function(data){
                 console.log(data);
             
-                if(data.logado){
-                    window.location = "painel-inicial.php"
+                if(data.logado) {
+                    window.location = "painel-inicial.php";
                 } else {
                     alert("Verifique usuário ou senha");   
                 }
                 
             });
-        
+         
     }
-    
+     
 });

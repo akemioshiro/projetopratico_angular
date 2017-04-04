@@ -1,4 +1,4 @@
-<html ng-app="app">
+﻿<html ng-app="app">
     <head>
         <title>Painel Administrativo - Login</title>
         <meta charset="utf-8">
@@ -53,7 +53,7 @@
                 </div>
                 
             </div>
-            
+             
             
         </div>
         
